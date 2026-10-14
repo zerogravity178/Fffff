@@ -1,0 +1,14 @@
+
+{
+  "id": "./",
+  "name": "PRIME ERA",
+  "short_name": "PRIME ERA",
+  "description": "Трекер тренировок, тела, питания и сна",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1012",
+  "theme_color": "#0b1012"
+}
