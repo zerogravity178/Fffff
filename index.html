@@ -1,0 +1,492 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1012">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PRIME ERA">
+<link rel="manifest" href="./manifest.json">
+<title>PRIME ERA</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1012;--panel:#141c1f;--panel2:#1b2729;--line:#29383a;--teal:#43e0bf;--text:#f1f7f5;--muted:#92a5a1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:100px}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:700px;margin:auto;padding:env(safe-area-inset-top) 16px 20px}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+.brand{font-weight:900;letter-spacing:2px;font-size:22px}
+.brand span{color:var(--teal)}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.page{display:none}
+.page.active{display:block}
+.hero{padding:23px;background:linear-gradient(135deg,#173b35,#152321);border:1px solid #28564d;border-radius:22px;margin-bottom:14px}
+.eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:10px;color:var(--muted)}
+h1{font-size:29px;line-height:1.15;margin:12px 0}
+h2{font-size:23px;margin:12px 0 18px}
+h3{font-size:15px;margin:0 0 10px}
+.hero p{color:#b6cdc7;line-height:1.5}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:16px;margin-bottom:12px;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.metric{font-size:25px;font-weight:850;margin:9px 0 3px;overflow-wrap:anywhere}
+.row{display:flex;align-items:center;gap:9px}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.btn{background:var(--teal);color:#082019;border:0;border-radius:11px;padding:13px 15px;font-weight:800}
+.btn.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}
+.btn.danger{background:#402424;color:#ffb2b2}
+.btn.small{padding:9px 11px;font-size:12px}
+.full{width:100%}
+.section{font-size:18px;font-weight:800;margin:23px 0 12px}
+.field{display:flex;flex-direction:column;gap:7px;margin:12px 0}
+.field label{font-size:12px;color:var(--muted)}
+input,select{width:100%;min-width:0;background:#0d1416;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:12px}
+input:focus,select:focus{outline:1px solid var(--teal)}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tabs{position:fixed;z-index:5;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:2px;background:#101719f5;backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:8px 4px calc(8px + env(safe-area-inset-bottom))}
+.tab{flex:1;max-width:110px;background:none;border:0;color:var(--muted);font-size:10px;padding:5px 1px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.tab b{font-size:20px;font-weight:500}
+.tab.active{color:var(--teal)}
+.exercise{background:#0f1719;border:1px solid var(--line);border-radius:13px;padding:12px;margin-top:12px}
+.setrow{display:grid;grid-template-columns:25px 1fr 1fr 34px;align-items:center;gap:6px;margin:8px 0}
+.setrow input{padding:10px 4px;text-align:center}
+.setrow .muted{text-align:center;font-size:11px}
+.item{padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.empty{text-align:center;color:var(--muted);padding:20px 8px;line-height:1.5}
+.pill{font-size:11px;color:var(--teal);background:#16332d;border-radius:20px;padding:6px 9px}
+.bar{height:7px;background:#283638;border-radius:8px;overflow:hidden;margin-top:9px}
+.bar span{height:100%;display:block;background:var(--teal)}
+canvas{display:block;width:100%;height:180px}
+.toast{display:none;position:fixed;z-index:10;top:20px;left:50%;transform:translateX(-50%);max-width:90%;padding:12px 16px;border-radius:12px;background:var(--teal);color:#082019;font-weight:750;text-align:center}
+.hidden{display:none!important}
+.footnote{font-size:11px;color:var(--muted);line-height:1.6}
+@media(min-width:560px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div>
+    <div class="brand">PRIME <span>ERA</span></div>
+    <div class="muted small" id="today"></div>
+  </div>
+  <span class="pill">YOUR EVOLUTION</span>
+</header>
+
+<section class="page active" id="home">
+  <div class="hero">
+    <div class="eyebrow">Твоя следующая версия</div>
+    <h1>Не жди мотивации.<br>Строй систему.</h1>
+    <p>Каждая тренировка приближает тебя к результату.</p>
+    <button class="btn" onclick="newWorkout()">＋ Начать тренировку</button>
+  </div>
+  <div class="grid">
+    <div class="card"><div class="muted small">Тренировки</div><div class="metric" id="mWorkouts">0</div><div class="muted small">завершено</div></div>
+    <div class="card"><div class="muted small">Вес тела</div><div class="metric" id="mWeight">—</div><div class="muted small">кг</div></div>
+    <div class="card"><div class="muted small">Сон сегодня</div><div class="metric" id="mSleep">—</div><div class="muted small">часов</div></div>
+    <div class="card"><div class="muted small">Калории</div><div class="metric" id="mCalories">0</div><div class="muted small">сегодня</div></div>
+  </div>
+  <div class="section">Последняя тренировка</div>
+  <div class="card" id="lastWorkout"><div class="empty">Твоя история начнётся здесь.</div></div>
+  <div class="section">Последние достижения</div>
+  <div class="card" id="recent"><div class="empty">Сначала нужна первая тренировка.</div></div>
+</section>
+
+<section class="page" id="training">
+  <h2>Тренировки</h2>
+  <div class="card hidden" id="editor">
+    <div class="row between"><div><div class="eyebrow">Текущая сессия</div><h3 id="sessionHeading">Full Body</h3></div><button class="btn secondary small" onclick="cancelWorkout()">Отмена</button></div>
+    <div class="field"><label>Название</label><input id="sessionName" value="Full Body" oninput="document.getElementById('sessionHeading').textContent=this.value"></div>
+    <div class="field"><label>Упражнение</label><div class="row"><select id="exerciseSelect" class="grow"></select><button class="btn small" onclick="addExercise()">Добавить</button></div></div>
+    <div id="exerciseList"></div>
+    <button class="btn full" style="margin-top:16px" onclick="finishWorkout()">Завершить тренировку</button>
+  </div>
+  <button id="startButton" class="btn" onclick="newWorkout()">＋ Новая тренировка</button>
+  <div class="section">История</div><div id="history"></div>
+</section>
+
+<section class="page" id="body">
+  <h2>Тело и прогресс</h2>
+  <div class="card">
+    <h3>Новые замеры</h3>
+    <div class="formgrid">
+      <div class="field"><label>Вес, кг</label><input id="bodyWeight" type="number" min="0" step=".1" placeholder="74.5"></div>
+      <div class="field"><label>Талия, см</label><input id="waist" type="number" min="0" step=".1" placeholder="82"></div>
+      <div class="field"><label>Грудь, см</label><input id="chest" type="number" min="0" step=".1" placeholder="96"></div>
+      <div class="field"><label>Рука, см</label><input id="arm" type="number" min="0" step=".1" placeholder="32"></div>
+    </div>
+    <button class="btn" onclick="saveBody()">Сохранить замеры</button>
+  </div>
+  <div class="card"><div class="eyebrow">Динамика веса</div><div class="metric" id="weightChange">—</div><canvas id="weightChart" width="600" height="220"></canvas></div>
+  <div class="section">История замеров</div><div id="bodyHistory"></div>
+</section>
+
+<section class="page" id="life">
+  <h2>Питание и сон</h2>
+  <div class="card">
+    <h3>Питание за сегодня</h3>
+    <div class="metric"><span id="calorieTotal">0</span> <span class="muted small">ккал</span></div>
+    <div class="bar"><span id="calorieBar" style="width:0%"></span></div>
+    <div class="muted small" style="margin-top:7px">Ориентир: 2500 ккал. Настроить цель можно позже.</div>
+    <div class="formgrid">
+      <div class="field"><label>Продукт или приём пищи</label><input id="foodName" placeholder="Обед"></div>
+      <div class="field"><label>Калории</label><input id="foodCalories" type="number" min="1" placeholder="650"></div>
+    </div>
+    <button class="btn" onclick="addFood()">＋ Записать еду</button>
+    <div id="foodList" style="margin-top:12px"></div>
+  </div>
+  <div class="card">
+    <h3>Сон</h3>
+    <div class="field"><label>Дата</label><input id="sleepDate" type="date"></div>
+    <div class="field"><label>Продолжительность, часов</label><input id="sleepHours" type="number" min=".25" max="24" step=".25" placeholder="7.5"></div>
+    <button class="btn" onclick="saveSleep()">Сохранить сон</button>
+    <div id="sleepHistory" style="margin-top:12px"></div>
+  </div>
+</section>
+
+<section class="page" id="settings">
+  <h2>Настройки и данные</h2>
+  <div class="card">
+    <h3>Резервная копия</h3>
+    <p class="muted">Сохрани файл перед сменой устройства или очисткой данных браузера.</p>
+    <button class="btn full" onclick="exportData()">Экспортировать данные</button>
+    <label class="btn secondary full" style="display:block;text-align:center;margin-top:10px">Импортировать копию<input type="file" accept=".json,application/json" style="display:none" onchange="importData(event)"></label>
+  </div>
+  <div class="card">
+    <h3>О приложении</h3>
+    <div class="brand">PRIME <span>ERA</span></div>
+    <p class="muted">Твоя система тренировок и развития.</p>
+    <div class="footnote">Версия 1.0. Данные хранятся в браузере на этом устройстве. Синхронизации между устройствами и загрузки фотографий пока нет.</div>
+  </div>
+  <div class="card">
+    <h3>Удаление данных</h3>
+    <p class="muted">Удалит все записи. Сначала сделай резервную копию.</p>
+    <button class="btn danger" onclick="clearAll()">Удалить все данные</button>
+  </div>
+</section>
+</div>
+
+<nav class="tabs">
+  <button class="tab active" data-page="home" onclick="showPage('home')"><b>⌂</b>Главная</button>
+  <button class="tab" data-page="training" onclick="showPage('training')"><b>▤</b>Зал</button>
+  <button class="tab" data-page="body" onclick="showPage('body')"><b>◉</b>Тело</button>
+  <button class="tab" data-page="life" onclick="showPage('life')"><b>♡</b>Режим</button>
+  <button class="tab" data-page="settings" onclick="showPage('settings')"><b>⚙</b>Данные</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const KEY = "primeEraDataV1";
+const exercises = [
+  "Подтягивания","Жим от груди в тренажёре","Жим гантелей лёжа",
+  "Бабочка на грудь","Тяга горизонтального блока","Тяга верхнего блока",
+  "Жим ногами","Разгибание ног","Сгибание ног",
+  "Сгибание рук в тренажёре","Разгибание рук на блоке",
+  "Жим плечами в тренажёре","Подъёмы на икры","Планка","Гиперэкстензия"
+];
+
+function emptyData(){return {workouts:[],body:[],food:[],sleep:[]};}
+function loadData(){
+  try {
+    const parsed=JSON.parse(localStorage.getItem(KEY)||"{}");
+    return {
+      workouts:Array.isArray(parsed.workouts)?parsed.workouts:[],
+      body:Array.isArray(parsed.body)?parsed.body:[],
+      food:Array.isArray(parsed.food)?parsed.food:[],
+      sleep:Array.isArray(parsed.sleep)?parsed.sleep:[]
+    };
+  } catch(e){return emptyData();}
+}
+let data=loadData();
+let current=null;
+let toastTimer=null;
+
+function today(){
+  const d=new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function pretty(date){
+  if(!date)return "";
+  const parts=date.split("-").map(Number);
+  return new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString("ru-RU",{day:"numeric",month:"short",year:"numeric"});
+}
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function notify(message){
+  const el=document.getElementById("toast");
+  el.textContent=message;
+  el.style.display="block";
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.style.display="none",2400);
+}
+function saveData(){
+  try{
+    localStorage.setItem(KEY,JSON.stringify(data));
+    renderAll();
+  }catch(e){
+    notify("Не удалось сохранить данные. Освободи место и экспортируй копию.");
+  }
+}
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.page===id));
+  if(id==="body")drawChart();
+}
+
+function newWorkout(){
+  if(current){showPage("training");return;}
+  current={id:makeId(),date:today(),name:"Full Body",exercises:[]};
+  document.getElementById("sessionName").value="Full Body";
+  document.getElementById("sessionHeading").textContent="Full Body";
+  document.getElementById("exerciseSelect").innerHTML=exercises.map(x=>'<option>'+escapeHTML(x)+'</option>').join("");
+  document.getElementById("editor").classList.remove("hidden");
+  document.getElementById("startButton").classList.add("hidden");
+  renderSession();
+  showPage("training");
+}
+function makeId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function cancelWorkout(){
+  if(confirm("Отменить текущую тренировку?")){
+    current=null;
+    document.getElementById("editor").classList.add("hidden");
+    document.getElementById("startButton").classList.remove("hidden");
+  }
+}
+function addExercise(){
+  if(!current)return;
+  const name=document.getElementById("exerciseSelect").value;
+  current.exercises.push({id:makeId(),name,sets:[{reps:10,weight:0}]});
+  renderSession();
+}
+function addSet(id){
+  const ex=current?.exercises.find(x=>x.id===id);
+  if(!ex)return;
+  const last=ex.sets[ex.sets.length-1];
+  ex.sets.push({reps:last?.reps||10,weight:last?.weight||0});
+  renderSession();
+}
+function removeSet(id,index){
+  const ex=current?.exercises.find(x=>x.id===id);
+  if(ex&&ex.sets.length>1){ex.sets.splice(index,1);renderSession();}
+}
+function updateSet(id,index,key,value){
+  const ex=current?.exercises.find(x=>x.id===id);
+  if(!ex)return;
+  ex.sets[index][key]=Math.max(0,Number(value)||0);
+}
+function removeExercise(id){
+  if(current){current.exercises=current.exercises.filter(x=>x.id!==id);renderSession();}
+}
+function renderSession(){
+  if(!current)return;
+  document.getElementById("exerciseList").innerHTML=current.exercises.map(ex=>`
+    <div class="exercise">
+      <div class="row between"><h3>${escapeHTML(ex.name)}</h3><button class="btn secondary small" onclick="removeExercise('${ex.id}')">Убрать</button></div>
+      <div class="setrow"><span class="muted">№</span><span class="muted">Повторения</span><span class="muted">Вес, кг</span><span></span></div>
+      ${ex.sets.map((s,i)=>`
+        <div class="setrow">
+          <span class="muted">${i+1}</span>
+          <input type="number" min="0" aria-label="Повторения" value="${s.reps}" onchange="updateSet('${ex.id}',${i},'reps',this.value)">
+          <input type="number" min="0" step=".5" aria-label="Вес" value="${s.weight}" onchange="updateSet('${ex.id}',${i},'weight',this.value)">
+          <button class="btn secondary small" onclick="removeSet('${ex.id}',${i})">×</button>
+        </div>`).join("")}
+      <button class="btn secondary small" onclick="addSet('${ex.id}')">＋ Подход</button>
+    </div>`).join("");
+}
+function finishWorkout(){
+  if(!current)return;
+  if(!current.exercises.length){notify("Сначала добавь упражнение");return;}
+  current.name=document.getElementById("sessionName").value.trim()||"Тренировка";
+  current.exercises.forEach(ex=>ex.sets.forEach(s=>{
+    s.reps=Math.max(0,Number(s.reps)||0);
+    s.weight=Math.max(0,Number(s.weight)||0);
+  }));
+  data.workouts.unshift({...current,finishedAt:new Date().toISOString()});
+  current=null;
+  document.getElementById("editor").classList.add("hidden");
+  document.getElementById("startButton").classList.remove("hidden");
+  saveData();
+  notify("Тренировка сохранена");
+}
+function deleteWorkout(id){
+  if(confirm("Удалить эту тренировку?")){
+    data.workouts=data.workouts.filter(w=>w.id!==id);
+    saveData();
+  }
+}
+
+function readNumber(id){
+  const value=document.getElementById(id).value;
+  if(value==="")return null;
+  const n=Number(value);
+  return Number.isFinite(n)&&n>=0?n:null;
+}
+function saveBody(){
+  const entry={date:today(),weight:readNumber("bodyWeight"),waist:readNumber("waist"),chest:readNumber("chest"),arm:readNumber("arm")};
+  if([entry.weight,entry.waist,entry.chest,entry.arm].every(v=>v===null)){
+    notify("Введи хотя бы один замер");return;
+  }
+  data.body.unshift(entry);
+  ["bodyWeight","waist","chest","arm"].forEach(id=>document.getElementById(id).value="");
+  saveData();
+  notify("Замеры сохранены");
+}
+function addFood(){
+  const name=document.getElementById("foodName").value.trim();
+  const calories=Number(document.getElementById("foodCalories").value);
+  if(!name||!Number.isFinite(calories)||calories<=0){
+    notify("Укажи продукт и количество калорий");return;
+  }
+  data.food.unshift({id:makeId(),date:today(),name,calories});
+  document.getElementById("foodName").value="";
+  document.getElementById("foodCalories").value="";
+  saveData();notify("Записано");
+}
+function deleteFood(id){
+  data.food=data.food.filter(f=>f.id!==id);
+  saveData();
+}
+function saveSleep(){
+  const date=document.getElementById("sleepDate").value;
+  const hours=Number(document.getElementById("sleepHours").value);
+  if(!date||!Number.isFinite(hours)||hours<=0||hours>24){
+    notify("Проверь дату и продолжительность сна");return;
+  }
+  data.sleep=data.sleep.filter(s=>s.date!==date);
+  data.sleep.unshift({date,hours});
+  saveData();notify("Сон сохранён");
+}
+function renderAll(){
+  document.getElementById("today").textContent=new Date().toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"});
+  document.getElementById("mWorkouts").textContent=data.workouts.length;
+  const weights=data.body.filter(b=>b.weight!==null).sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById("mWeight").textContent=weights.length?weights[0].weight:"—";
+  const sleepToday=data.sleep.find(s=>s.date===today());
+  document.getElementById("mSleep").textContent=sleepToday?sleepToday.hours:"—";
+  const calories=data.food.filter(f=>f.date===today()).reduce((sum,f)=>sum+f.calories,0);
+  document.getElementById("mCalories").textContent=calories;
+  document.getElementById("calorieTotal").textContent=calories;
+  document.getElementById("calorieBar").style.width=Math.min(100,calories/2500*100)+"%";
+
+  const last=data.workouts[0];
+  document.getElementById("lastWorkout").innerHTML=last
+    ?`<div class="row between"><div><b>${escapeHTML(last.name)}</b><div class="muted small" style="margin-top:6px">${pretty(last.date)} · ${last.exercises.length} упражн.</div></div><span class="pill">Завершена</span></div>`
+    :'<div class="empty">Твоя история начнётся здесь.</div>';
+
+  document.getElementById("recent").innerHTML=last
+    ?last.exercises.slice(0,4).map(e=>`<div class="item"><b>${escapeHTML(e.name)}</b><div class="muted small">${e.sets.length} подходов · ${e.sets.reduce((n,s)=>n+s.reps,0)} повторений</div></div>`).join("")
+    :'<div class="empty">Сначала нужна первая тренировка.</div>';
+
+  document.getElementById("history").innerHTML=data.workouts.length
+    ?data.workouts.map(w=>`<div class="card">
+      <div class="row between"><div><b>${escapeHTML(w.name)}</b><div class="muted small" style="margin-top:6px">${pretty(w.date)} · ${w.exercises.length} упражн.</div></div><button class="btn secondary small" onclick="deleteWorkout('${w.id}')">Удалить</button></div>
+      ${w.exercises.map(e=>`<div class="item"><div class="row between"><span>${escapeHTML(e.name)}</span><span class="muted small">${e.sets.length} подх.</span></div><div class="muted small">${e.sets.map(s=>s.weight+" кг × "+s.reps).join(" · ")}</div></div>`).join("")}
+      </div>`).join("")
+    :'<div class="card empty">Тренировок пока нет.</div>';
+
+  document.getElementById("bodyHistory").innerHTML=data.body.length
+    ?data.body.map(b=>`<div class="card"><div class="row between"><b>${pretty(b.date)}</b><span class="pill">${b.weight!==null?b.weight+" кг":"Замеры"}</span></div><div class="muted small" style="margin-top:9px">Талия: ${b.waist??"—"} см · Грудь: ${b.chest??"—"} см · Рука: ${b.arm??"—"} см</div></div>`).join("")
+    :'<div class="card empty">Запиши первые замеры.</div>';
+
+  document.getElementById("foodList").innerHTML=data.food.filter(f=>f.date===today())
+    .map(f=>`<div class="item row between"><div class="grow">${escapeHTML(f.name)}<div class="muted small">${f.calories} ккал</div></div><button class="btn secondary small" onclick="deleteFood('${f.id}')">×</button></div>`).join("")
+    ||'<div class="muted small" style="margin-top:10px">Еда пока не записана.</div>';
+
+  document.getElementById("sleepHistory").innerHTML=data.sleep.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,7)
+    .map(s=>`<div class="item row between"><span>${pretty(s.date)}</span><b>${s.hours} ч</b></div>`).join("")
+    ||'<div class="muted small" style="margin-top:10px">История сна появится здесь.</div>';
+
+  drawChart();
+}
+function drawChart(){
+  const canvas=document.getElementById("weightChart");
+  if(!canvas)return;
+  const ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  const points=data.body.filter(b=>b.weight!==null).slice().reverse();
+  if(!points.length){
+    ctx.fillStyle="#92a5a1";ctx.font="16px sans-serif";
+    ctx.fillText("Добавь замеры, чтобы увидеть график",12,100);
+    document.getElementById("weightChange").textContent="—";
+    return;
+  }
+  const vals=points.map(p=>p.weight);
+  let min=Math.min(...vals)-1,max=Math.max(...vals)+1;
+  if(min===max){min-=1;max+=1;}
+  ctx.strokeStyle="#29383a";
+  for(let i=0;i<4;i++){
+    const y=18+i*(h-48)/3;
+    ctx.beginPath();ctx.moveTo(30,y);ctx.lineTo(w-12,y);ctx.stroke();
+  }
+  const coords=vals.map((v,i)=>({
+    x:points.length===1?w/2:30+i*(w-45)/(points.length-1),
+    y:18+(max-v)/(max-min)*(h-48)
+  }));
+  ctx.strokeStyle="#43e0bf";ctx.lineWidth=3;ctx.beginPath();
+  coords.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+  ctx.stroke();
+  coords.forEach((p,i)=>{
+    ctx.fillStyle="#43e0bf";ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fill();
+    if(i===0||i===coords.length-1){
+      ctx.fillStyle="#f1f7f5";ctx.font="13px sans-serif";
+      ctx.fillText(vals[i]+" кг",p.x-18,p.y-10);
+    }
+  });
+  const change=vals[vals.length-1]-vals[0];
+  document.getElementById("weightChange").textContent=(change>0?"+":"")+change.toFixed(1)+" кг";
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="prime-era-backup-"+today()+".json";
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  notify("Резервная копия подготовлена");
+}
+function importData(event){
+  const file=event.target.files?.[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const x=JSON.parse(reader.result);
+      if(!x||!["workouts","body","food","sleep"].every(k=>Array.isArray(x[k])))throw Error("invalid");
+      if(!confirm("Импорт заменит текущие данные. Продолжить?"))return;
+      data={workouts:x.workouts,body:x.body,food:x.food,sleep:x.sleep};
+      saveData();notify("Данные импортированы");
+    }catch(e){notify("Не удалось прочитать резервную копию");}
+    finally{event.target.value="";}
+  };
+  reader.readAsText(file);
+}
+function clearAll(){
+  if(confirm("Удалить все тренировки, замеры, питание и сон?")&&confirm("Последнее подтверждение. Резервная копия сохранена?")){
+    data=emptyData();current=null;
+    localStorage.removeItem(KEY);
+    document.getElementById("editor").classList.add("hidden");
+    document.getElementById("startButton").classList.remove("hidden");
+    saveData();notify("Данные удалены");
+  }
+}
+
+document.getElementById("sleepDate").value=today();
+renderAll();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js").catch(error=>{
+      console.error("Ошибка регистрации офлайн-режима:",error);
+    });
+  });
+}
+</script>
+</body>
+</html>
